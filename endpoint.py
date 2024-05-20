@@ -1,5 +1,5 @@
 from .base import ApiConnection
-
+from .exceptions import ApiResponseException
 from hashlib import sha256
 
 class ApiEndpointTemplate:
@@ -41,7 +41,7 @@ class AuthEndpoint(ApiEndpointTemplate):
     def auth(self, tipo: str, username: str, password: str, data: object = None, **kwargs):
         ret = self._post({'username': username, 'password': sha256(password.encode()).hexdigest(), tipo: data, **kwargs }, path=f'/{tipo}')
         if not 'token' in ret:
-            raise Exception('invalid response')
+            raise ApiResponseException('invalid response')
 
         return ret
 

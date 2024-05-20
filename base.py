@@ -17,7 +17,6 @@ class ApiConnection:
     def request(self, method : str, endpoint : str, raw=False, **kwargs):
         response : Response
         try:
-            print(f'connecting in {self.base_url}{endpoint}')
             url = f"{self.base_url}{endpoint}"
             response = self.session.request(method, url , headers=self._get_headers(), verify=False, **kwargs)
             
