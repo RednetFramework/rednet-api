@@ -7,17 +7,17 @@ class ApiClientErrors:
     UNKNOW = 7
 
 ApiClientExceptionMessage = {
-    ApiClientErrors.CONNECTION: 'Error to connect on server',
-    ApiClientErrors.TIMEOUT : 'Timeout',
-    ApiClientErrors.INVALID_URL : 'Invalid URL',
-    ApiClientErrors.INVALID_SCHEMA : 'Invalid Schema',
-    ApiClientErrors.UNKNOW : 'Unknow Exception'
+    ApiClientErrors.CONNECTION: "Error to connect on server",
+    ApiClientErrors.TIMEOUT: "Timeout",
+    ApiClientErrors.INVALID_URL: "Invalid URL",
+    ApiClientErrors.INVALID_SCHEMA: "Invalid Schema",
+    ApiClientErrors.UNKNOW: "Unknow Exception",
 }
 
 class ApiResponseException(Exception):
     def __init__(self, *args):
         super().__init__(*args)
-    
+
 class ApiClientException(Exception):
     def __init__(self, *args):
         super().__init__(*args)
