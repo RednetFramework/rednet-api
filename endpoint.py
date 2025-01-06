@@ -1,5 +1,6 @@
 from .base import ApiConnection
 from .exceptions import ApiResponseException
+from typing import Optional, Dict, Any
 
 class ApiEndpointTemplate:
     def __init__(self, client: ApiConnection, endpoint: str):
@@ -35,7 +36,16 @@ class ApiEndpointTemplate:
 
 
 class AgentEndpoint(ApiEndpointTemplate):
-    pass
+    def execute(self, id: str, command: str, type: str = "shell", timeout: int = 60, metadata: dict = None):
+        return self._post(
+            {
+                "command": command,
+                "type": type,
+                "timeout": timeout,
+                "metadata": metadata or {}
+            },
+            path=f"/execute/{id}"
+        )
 
 
 class AuthEndpoint(ApiEndpointTemplate):
@@ -60,5 +70,36 @@ class ListenerEndpoint(ApiEndpointTemplate):
     def transmit(self, magick: str, data: str):
         return self._post({"magick": magick, "data": data}, path="/transmit", raw=True)
 
+class CommandEndpoint(ApiEndpointTemplate):
+    def get_by_uuid(self, uuid: str):
+        return self._get(path=f"/{uuid}")
+
+    def get_by_agent(self, agent_uuid: str):
+        return self._get(path="", params={"agent_uuid": agent_uuid})
+
+    def get_by_operator(self, operator_uuid: str):
+        return self._get(path="", params={"operator_uuid": operator_uuid})
+
+    def update_status(self, uuid: str, status: str, output: Optional[str] = None, error: Optional[str] = None, exit_code: Optional[int] = None):
+        data: Dict[str, Any] = {"status": status}
+        if output is not None:
+            data["output"] = output
+        if error is not None:
+            data["error"] = error
+        if exit_code is not None:
+            data["exit_code"] = exit_code
+        return self._patch(uuid, data=data)
+
+
 class HandlerEndpoint(ApiEndpointTemplate):
-    pass
+    def find_by_magick(self, magick: str):
+        return self._get(path=f"/magick/{magick}")
+
+    def get_builds(self, handler_id: str):
+        return self._get(path=f"/{handler_id}/builds")
+
+    def request_build(self, handler_id: str, options: dict = None):
+        return self._post(
+            data={"options": options or {}},
+            path=f"/{handler_id}/build"
+        )

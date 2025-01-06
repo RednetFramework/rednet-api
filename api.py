@@ -5,6 +5,7 @@ from .endpoint import (
     HandlerEndpoint,
     ListenerEndpoint,
     OperatorEndpoint,
+    CommandEndpoint,
 )
 
 
@@ -16,6 +17,7 @@ class Api:
         self.agent = AgentEndpoint(connection, "/agent")
         self.handler = HandlerEndpoint(connection, "/handler")
         self.listener = ListenerEndpoint(connection, "/listener")
+        self.command = CommandEndpoint(connection, "/command")
 
     def add_token(self, token: str):
         self.token = token
