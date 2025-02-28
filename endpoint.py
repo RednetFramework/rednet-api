@@ -43,7 +43,7 @@ class AuthEndpoint(ApiEndpointTemplate):
         self, tipo: str, username: str, password: str, data: object = None, **kwargs
     ):
         ret = self._post(
-            {"username": username, "password": password, tipo: data, **kwargs},
+            {"username": username, "password": password, **kwargs},
             path=f"/{tipo}",
         )
         if "token" not in ret:
